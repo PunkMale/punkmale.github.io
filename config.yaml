@@ -1,0 +1,21 @@
+title: "Fang Zhihua's Homepage"
+baseURL: "https://punkmale.github.io"
+
+params:
+  name: "Fang Zhihua (方志华)"
+  role: "Ph.D. Candidate in Computer Science"
+  organization: "Xinjiang University"
+  location: "Urumqi, Xinjiang, China"
+  avatar: "assets/fzh.jpg"
+  favicon: "assets/avatar.jpg"
+  
+  social:
+    - icon: "fas fa-envelope"
+      link: "mailto:fzh.xju@gmail.com"
+      text: "fzh.xju@gmail.com"
+    - icon: "fab fa-github"
+      link: "https://github.com/PunkMale"
+      text: "GitHub"
+    - icon: "ai ai-google-scholar"
+      link: "https://scholar.google.com/citations?user=elyXbgQAAAAJ"
+      text: "Google Scholar"

@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loading...</title>
+    <link rel="icon" href="data:;base64,=">
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/js-yaml/4.1.0/js-yaml.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+    
+    <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']]
+      }
+    };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <style>
+        /* --- 基础样式 --- */
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        :root {
+            --primary-color: #0056b3; 
+            --sidebar-width: 300px;
+            --bg-color: #f8f9fa;
+            --text-color: #333;
+            --font-serif: "Garamond", "Georgia", "Times New Roman", serif;
+            --font-sans: "Helvetica", "Arial", sans-serif;
+        }
+        body {
+            font-family: var(--font-serif);
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            display: flex;
+            min-height: 100vh;
+            flex-direction: row;
+        }
+        html { scroll-behavior: smooth; }
+
+        /* --- 左侧边栏 --- */
+        #sidebar {
+            width: var(--sidebar-width);
+            background-color: #fff;
+            padding: 40px 20px;
+            border-right: 1px solid #ddd;
+            display: flex;
+            flex-direction: column;
+            align-items: center; 
+            text-align: center;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+            top: 0; left: 0;
+            z-index: 100;
+            font-family: var(--font-serif);
+        }
+        #avatar {
+            width: 160px; height: 160px;
+            border-radius: 50%; object-fit: cover;
+            margin-bottom: 15px;
+            border: 4px solid var(--primary-color);
+            transition: transform 0.3s;
+        }
+        #avatar:hover { transform: scale(1.05); }
+        #name { font-size: 1.8em; font-weight: bold; margin-bottom: 5px; line-height: 1.2; }
+        #name-cn { font-size: 1.2em; color: #666; margin-bottom: 15px; font-weight: normal; } 
+        #title { color: #555; margin-bottom: 25px; font-size: 1.1em; line-height: 1.5; padding: 0 10px; }
+        
+        .contact-info { 
+            width: 100%; 
+            padding-left: 30px; 
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            font-size: 1.1em;
+        }
+        .contact-item { 
+            margin-bottom: 15px; 
+            display: flex; 
+            align-items: center; 
+            color: #555; 
+            justify-content: flex-start; 
+            width: 100%;
+        }
+        .contact-item i { 
+            width: 25px; 
+            color: var(--primary-color); 
+            text-align: center; 
+            margin-right: 12px; 
+            font-size: 1.1em;
+        }
+        .contact-item a { 
+            color: #555; 
+            text-decoration: none; 
+            transition: 0.3s; 
+            text-align: left;
+        }
+        .contact-item a:hover { color: var(--primary-color); }
+
+        /* --- 右侧主要内容 --- */
+        #main {
+            margin-left: var(--sidebar-width);
+            padding: 0 60px 40px 60px;
+            width: 100%;
+            max-width: 1500px;
+            font-family: var(--font-serif);
+            font-size: 1.15em;
+        }
+
+        /* --- 顶部导航栏 --- */
+        #top-nav {
+            position: sticky;
+            top: 0;
+            background-color: rgba(248, 249, 250, 0.95);
+            backdrop-filter: blur(5px);
+            padding: 20px 0;
+            margin-bottom: 30px;
+            border-bottom: 1px solid #eaeaea;
+            z-index: 10;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 25px;
+            font-family: var(--font-sans); 
+        }
+        #top-nav a {
+            color: #666;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1rem;
+            position: relative;
+            cursor: pointer;
+        }
+        #top-nav a:hover { color: var(--primary-color); }
+        #top-nav a::after {
+            content: ''; position: absolute; width: 0; height: 2px;
+            bottom: -5px; left: 0; background-color: var(--primary-color);
+            transition: width 0.3s;
+        }
+        #top-nav a:hover::after { width: 100%; }
+
+        /* --- Markdown 内容样式 --- */
+        .markdown-body { line-height: 1.7; }
+        .markdown-body h1, .markdown-body h2, .markdown-body h3 { 
+            font-family: var(--font-sans);
+            color: var(--primary-color); 
+            font-weight: bold;
+        }
+        .markdown-body h1 { 
+            border-bottom: 2px solid #eee; 
+            padding-bottom: 10px; 
+            margin-top: 50px; 
+            margin-bottom: 25px;
+            scroll-margin-top: 80px; 
+            font-size: 1.8em;
+        }
+        .markdown-body h2 {
+            margin-top: 30px;
+            margin-bottom: 15px;
+            font-size: 1.4em;
+            color: #444;
+        }
+        .markdown-body a { color: var(--primary-color); text-decoration: none; font-weight: 500; }
+        .markdown-body a:hover { text-decoration: underline; }
+        .markdown-body ul li { margin-bottom: 10px; }
+
+        @media (max-width: 768px) {
+            body { flex-direction: column; }
+            #sidebar { position: relative; width: 100%; height: auto; border-right: none; border-bottom: 1px solid #ddd; padding: 30px 15px; }
+            #main { margin-left: 0; padding: 20px; }
+            #top-nav { top: 0; font-size: 0.9em; padding: 15px 0; overflow-x: auto; white-space: nowrap; }
+            .contact-info { padding-left: 0; align-items: center; }
+            .contact-item { justify-content: center; width: auto; margin-right: 15px; display: inline-flex;}
+            .contact-info { display: block; text-align: center;}
+        }
+    </style>
+</head>
+<body>
+
+    <aside id="sidebar">
+        </aside>
+
+    <main id="main">
+        <nav id="top-nav"></nav>
+        <div id="content" class="markdown-body">
+            Loading content...
+        </div>
+        <footer style="margin-top: 60px; color: #aaa; font-size: 0.85em; border-top: 1px solid #eee; padding-top: 20px; font-family: var(--font-sans);">
+            &copy; <span id="year"></span> <span id="footer-name"></span>.
+        </footer>
+    </main>
+
+    <script>
+        async function loadSite() {
+            try {
+                // 1. 加载 Config
+                const configRes = await fetch('config.yaml');
+                if (!configRes.ok) throw new Error("无法加载 config.yaml");
+                const config = jsyaml.load(await configRes.text());
+                applyConfig(config);
+
+                // 2. 加载 Content
+                const contentRes = await fetch('content.md');
+                if (!contentRes.ok) throw new Error("无法加载 content.md");
+                const contentText = await contentRes.text();
+                
+                // 3. 渲染 Markdown
+                const contentDiv = document.getElementById('content');
+                contentDiv.innerHTML = marked.parse(contentText);
+                
+                // 4. 生成导航
+                generateNavigation();
+                
+                // 5. 渲染公式 (修复版)
+                if (window.MathJax && window.MathJax.typesetPromise) {
+                    window.MathJax.typesetPromise().catch((err) => console.log('MathJax error:', err));
+                }
+
+            } catch (e) {
+                console.error(e);
+                document.getElementById('content').innerHTML = 
+                    `<div style="color: #721c24; background-color: #f8d7da; border: 1px solid #f5c6cb; padding: 20px; border-radius: 5px; font-family: sans-serif;">
+                        <h3 style="margin-top:0"><i class="fas fa-exclamation-triangle"></i> Error loading site</h3>
+                        <p>${e.message}</p>
+                        <hr>
+                        <p><strong>原因：</strong> 浏览器禁止本地文件（file://）跨域读取 config.yaml。</p>
+                        <p><strong>解决方法：</strong> 请在文件夹中打开终端/命令行，运行以下命令启动本地服务器：</p>
+                        <pre style="background:#eee; padding:10px;">python -m http.server</pre>
+                        <p>然后在浏览器打开 <a href="http://localhost:8000">http://localhost:8000</a></p>
+                    </div>`;
+            }
+        }
+
+        function applyConfig(cfg) {
+            const r = document.querySelector(':root');
+            if(cfg.params?.primary_color) r.style.setProperty('--primary-color', cfg.params.primary_color);
+            const p = cfg.params || {};
+
+            document.title = cfg.title || "Academic Homepage";
+            document.getElementById('footer-name').innerText = p.name || "My Name";
+            document.getElementById('year').innerText = new Date().getFullYear();
+
+            // Favicon 逻辑
+            if (p.favicon) {
+                let link = document.querySelector("link[rel~='icon']");
+                if (!link) {
+                    link = document.createElement('link');
+                    link.rel = 'icon';
+                    document.getElementsByTagName('head')[0].appendChild(link);
+                }
+                link.href = p.favicon;
+            }
+
+            const sidebar = document.getElementById('sidebar');
+            
+            let nameEn = p.name;
+            let nameCn = "";
+            if (p.name && p.name.includes('(')) {
+                const match = p.name.match(/(.*)\((.*)\)/);
+                if (match) {
+                    nameEn = match[1].trim();
+                    nameCn = match[2].trim();
+                }
+            }
+
+            const avatarPath = p.avatar || 'assets/avatar.jpg'; 
+
+            let html = `
+                <img id="avatar" src="${avatarPath}" alt="Avatar">
+                <div id="name">${nameEn}</div>
+                ${nameCn ? `<div id="name-cn">${nameCn}</div>` : ''}
+                <div id="title">${p.role || ''}<br>${p.organization || ''}</div>
+                <div class="contact-info">
+            `;
+
+            if (p.social) {
+                p.social.forEach(item => {
+                    let iconClass = item.icon;
+                    if (item.text && item.text.toLowerCase().includes("scholar")) {
+                         iconClass = "ai ai-google-scholar";
+                    }
+                    html += `
+                        <div class="contact-item">
+                            <i class="${iconClass}"></i>
+                            <a href="${item.link}" target="_blank">${item.text || "Link"}</a>
+                        </div>
+                    `;
+                });
+            }
+            html += `</div>`;
+            sidebar.innerHTML = html;
+        }
+
+        function generateNavigation() {
+            const nav = document.getElementById('top-nav');
+            const headers = document.querySelectorAll('#content h1'); 
+            
+            nav.innerHTML = ''; 
+
+            if (headers.length === 0) {
+                nav.style.display = 'none';
+                return;
+            }
+
+            headers.forEach((header, index) => {
+                if (!header.id) header.id = 'section-' + index;
+
+                const link = document.createElement('a');
+                link.href = `#${header.id}`;
+                link.innerText = header.innerText.replace(/^[^\w\s]+/, '').trim(); 
+                
+                link.onclick = (e) => {
+                    e.preventDefault();
+                    const target = document.getElementById(header.id);
+                    const offset = 80; 
+                    const bodyRect = document.body.getBoundingClientRect().top;
+                    const elementRect = target.getBoundingClientRect().top;
+                    const elementPosition = elementRect - bodyRect;
+                    const offsetPosition = elementPosition - offset;
+
+                    window.scrollTo({ top: offsetPosition, behavior: "smooth" });
+                };
+                nav.appendChild(link);
+            });
+        }
+        loadSite();
+    </script>
+</body>
+</html>
