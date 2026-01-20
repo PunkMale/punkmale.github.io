@@ -15,9 +15,9 @@ I am currently a Ph.D. candidate at **Xinjiang University**, advised by Prof. Li
 
 - Junxu Wang, **Zhihua Fang**, and Liang He*, "[Self-supervised Speaker Verification with Batch-scale Pseudo-labels Correction](https://doi.org/10.1109/icassp49660.2025.10888615)", in **ICASSP**, 2025.
 
-- Z. Wang, **Zhihua Fang**, and Liang He*, "[Stable Extended U-Net for Noise-Robust Speaker Verification](https://doi.org/10.1109/icassp49660.2025.10888454)", in **ICASSP**, 2025.
+- Zonghui Wang, **Zhihua Fang**, and Liang He*, "[Stable Extended U-Net for Noise-Robust Speaker Verification](https://doi.org/10.1109/icassp49660.2025.10888454)", in **ICASSP**, 2025.
 
-- Y. Meng, **Zhihua Fang**, and Liang He*, "[Federated Learning with Feature Space Separation for Speaker Recognition](https://doi.org/10.21437/interspeech.2025-364)", in **INTERSPEECH**, 2025.
+- Ying Meng, **Zhihua Fang**, and Liang He*, "[Federated Learning with Feature Space Separation for Speaker Recognition](https://doi.org/10.21437/interspeech.2025-364)", in **INTERSPEECH**, 2025.
 
 - **Zhihua Fang**, Liang He*, Lin Li, and Ying Hu, "[Improving Speaker Verification With Noise-Aware Label Ensembling and Sample Selection: Learning and Correcting Noisy Speaker Labels](https://doi.org/10.1109/TASLP.2024.3407527)", **IEEE/ACM TASLP**, 2024.
 
