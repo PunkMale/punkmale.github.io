@@ -1,5 +1,5 @@
 # 👨🏻‍💻 Biography
-I am currently a Ph.D. candidate at **Xinjiang University**, advised by Prof. Liang He. My research focuses on robust speech representation learning, particularly under noisy label conditions.
+I am currently a Ph.D. candidate at **Xinjiang University**, advised by Prof. Liang He. My research focuses on robust speaker representation learning, particularly under noisy label conditions.
 
 # 🔥 News
 - **[2026.01]** Four papers were accepted by **ICASSP 2026**.
