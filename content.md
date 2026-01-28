@@ -11,6 +11,10 @@ I am currently a Ph.D. candidate at **Xinjiang University**, advised by Prof. Li
 
 # 📝 Selected Publications
 
+- **Zhihua Fang** and Liang He*, "[Hyperbolic Additive Margin Softmax with Hierarchical Information for Speaker Verification](https://arxiv.org/abs/2601.19709)", in **ICASSP**, 2026.
+
+- **Zhihua Fang**, Shumei Tao, Junxu Wang, and Liang He*, "[XM-ALIGN: Unified Cross-Modal Embedding Alignment for Face-Voice Association](https://arxiv.org/abs/2512.06757)", in **ICASSP**, 2026.
+
 - Shun Huang, **Zhihua Fang**, and Liang He*, "[Noise Supervised Contrastive Learning and Feature-Perturbed for Anomalous Sound Detection](https://doi.org/10.1109/icassp49660.2025.10888995)", in **ICASSP**, 2025.
 
 - Junxu Wang, **Zhihua Fang**, and Liang He*, "[Self-supervised Speaker Verification with Batch-scale Pseudo-labels Correction](https://doi.org/10.1109/icassp49660.2025.10888615)", in **ICASSP**, 2025.
