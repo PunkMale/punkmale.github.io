@@ -30,3 +30,7 @@ I am currently a Ph.D. candidate at **Xinjiang University**, advised by Prof. Li
 # 🏅 Honors & Awards
 - **National Scholarship for Doctoral Students**, ($\times$1)
 - **Xinjiang Autonomous Region Academic Scholarship for Graduate Students**, ($\times$2)
+
+# Academic Services
+- **Conference Reviewer**: ICASSP (2025-2026), ICME (2024-2026), INTERSPEECH (2026)
+- **Journal Reviewer**: IEEE Signal Processing Letters, Scientific Reports
