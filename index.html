@@ -1,332 +1,1140 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="zh-CN" data-theme="claude">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Loading...</title>
     <link rel="icon" href="data:;base64,=">
-    
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/js-yaml/4.1.0/js-yaml.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
-    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
     <script>
-    window.MathJax = {
-      tex: {
-        inlineMath: [['$', '$'], ['\\(', '\\)']]
-      }
-    };
+    window.MathJax = { tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] } };
     </script>
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 
     <style>
-        /* --- 基础样式 --- */
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        :root {
-            --primary-color: #0056b3; 
-            --sidebar-width: 300px;
-            --bg-color: #f8f9fa;
-            --text-color: #333;
-            --font-serif: "Garamond", "Georgia", "Times New Roman", serif;
-            --font-sans: "Helvetica", "Arial", sans-serif;
-        }
-        body {
-            font-family: var(--font-serif);
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            display: flex;
-            min-height: 100vh;
-            flex-direction: row;
-        }
-        html { scroll-behavior: smooth; }
+/* ══════════════════════════════════════════════════════
+   RESET & SHARED BASE
+══════════════════════════════════════════════════════ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; min-height: 100vh; }
 
-        /* --- 左侧边栏 --- */
-        #sidebar {
-            width: var(--sidebar-width);
-            background-color: #fff;
-            padding: 40px 20px;
-            border-right: 1px solid #ddd;
-            display: flex;
-            flex-direction: column;
-            align-items: center; 
-            text-align: center;
-            position: fixed;
-            height: 100vh;
-            overflow-y: auto;
-            top: 0; left: 0;
-            z-index: 100;
-            font-family: var(--font-serif);
-        }
-        #avatar {
-            width: 160px; height: 160px;
-            border-radius: 50%; object-fit: cover;
-            margin-bottom: 15px;
-            border: 4px solid var(--primary-color);
-            transition: transform 0.3s;
-        }
-        #avatar:hover { transform: scale(1.05); }
-        #name { font-size: 1.8em; font-weight: bold; margin-bottom: 5px; line-height: 1.2; }
-        #name-cn { font-size: 1.2em; color: #666; margin-bottom: 15px; font-weight: normal; } 
-        #title { color: #555; margin-bottom: 25px; font-size: 1.1em; line-height: 1.5; padding: 0 10px; }
-        
-        .contact-info { 
-            width: 100%; 
-            padding-left: 30px; 
-            display: flex;
-            flex-direction: column;
-            align-items: flex-start;
-            font-size: 1.1em;
-        }
-        .contact-item { 
-            margin-bottom: 15px; 
-            display: flex; 
-            align-items: center; 
-            color: #555; 
-            justify-content: flex-start; 
-            width: 100%;
-        }
-        .contact-item i { 
-            width: 25px; 
-            color: var(--primary-color); 
-            text-align: center; 
-            margin-right: 12px; 
-            font-size: 1.1em;
-        }
-        .contact-item a { 
-            color: #555; 
-            text-decoration: none; 
-            transition: 0.3s; 
-            text-align: left;
-        }
-        .contact-item a:hover { color: var(--primary-color); }
+/* ══════════════════════════════════════════════════════
+   DESIGN TOKENS
+══════════════════════════════════════════════════════ */
+:root {
+    /* Claude */
+    --cl-accent:       #D97757;
+    --cl-accent-lt:    #F2C4B0;
+    --cl-accent-muted: #F5EBE6;
+    --cl-bg:           #FAF9F7;
+    --cl-surface:      #FFFFFF;
+    --cl-border:       #EAE5DE;
+    --cl-border-str:   #D9D2C8;
+    --cl-text:         #1C1917;
+    --cl-text-2:       #6B6459;
+    --cl-text-3:       #9C9189;
+    --cl-sidebar-w:    290px;
+    --cl-font:         'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    --cl-r:            10px;
+    --cl-r-sm:         6px;
+    /* Apple */
+    --ap-accent:       #0071E3;
+    --ap-accent-muted: rgba(0,113,227,0.1);
+    --ap-bg:           #FFFFFF;
+    --ap-surface:      #F5F5F7;
+    --ap-surface-2:    #FAFAFA;
+    --ap-border:       rgba(0,0,0,0.08);
+    --ap-border-str:   rgba(0,0,0,0.16);
+    --ap-text:         #1D1D1F;
+    --ap-text-2:       #6E6E73;
+    --ap-text-3:       #AEAEB2;
+    --ap-nav-h:        52px;
+    --ap-font:         -apple-system,'SF Pro Display','SF Pro Text','Inter','Helvetica Neue',Helvetica,Arial,sans-serif;
+    --ap-r:            18px;
+    --ap-r-sm:         10px;
+    /* Japan */
+    --jp-font:         'MS Gothic','ＭＳ ゴシック','Osaka','MS PGothic','Hiragino Kaku Gothic ProN','Noto Sans JP',monospace;
+}
 
-        /* --- 右侧主要内容 --- */
-        #main {
-            margin-left: var(--sidebar-width);
-            padding: 0 60px 40px 60px;
-            width: 100%;
-            max-width: 1500px;
-            font-family: var(--font-serif);
-            font-size: 1.15em;
-        }
+/* ══════════════════════════════════════════════════════
+   THEME TOGGLE BUTTON  (always fixed, top-right)
+══════════════════════════════════════════════════════ */
+#theme-toggle {
+    position: fixed;
+    top: 14px;
+    right: 20px;
+    z-index: 3000;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    padding: 7px 15px;
+    border-radius: 20px;
+    font-size: 0.78rem;
+    font-weight: 500;
+    letter-spacing: 0.05px;
+    cursor: pointer;
+    border: none;
+    outline: none;
+    transition: background 0.2s, color 0.2s, border-color 0.2s, box-shadow 0.2s;
+}
+#theme-toggle .tg-icon { display: flex; align-items: center; font-size: 0.88rem; }
 
-        /* --- 顶部导航栏 --- */
-        #top-nav {
-            position: sticky;
-            top: 0;
-            background-color: rgba(248, 249, 250, 0.95);
-            backdrop-filter: blur(5px);
-            padding: 20px 0;
-            margin-bottom: 30px;
-            border-bottom: 1px solid #eaeaea;
-            z-index: 10;
-            display: flex;
-            flex-wrap: wrap;
-            gap: 25px;
-            font-family: var(--font-sans); 
-        }
-        #top-nav a {
-            color: #666;
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 1rem;
-            position: relative;
-            cursor: pointer;
-        }
-        #top-nav a:hover { color: var(--primary-color); }
-        #top-nav a::after {
-            content: ''; position: absolute; width: 0; height: 2px;
-            bottom: -5px; left: 0; background-color: var(--primary-color);
-            transition: width 0.3s;
-        }
-        #top-nav a:hover::after { width: 100%; }
+[data-theme="claude"] #theme-toggle {
+    background: #FFFFFF;
+    color: var(--cl-text-2);
+    border: 1px solid var(--cl-border-str);
+    font-family: var(--cl-font);
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+}
+[data-theme="claude"] #theme-toggle:hover {
+    color: var(--cl-text);
+    border-color: var(--cl-accent);
+    background: var(--cl-accent-muted);
+}
+[data-theme="apple"] #theme-toggle {
+    background: rgba(255,255,255,0.85);
+    color: var(--ap-text-2);
+    border: 1px solid var(--ap-border-str);
+    font-family: var(--ap-font);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    box-shadow: 0 1px 6px rgba(0,0,0,0.08);
+}
+[data-theme="apple"] #theme-toggle:hover {
+    background: rgba(245,245,247,0.95);
+    color: var(--ap-text);
+    border-color: rgba(0,0,0,0.28);
+}
+[data-theme="japan"] #theme-toggle {
+    background: #000066;
+    color: #FFFF00;
+    border: 1px solid #FFFF00;
+    font-family: var(--jp-font);
+    box-shadow: 0 0 8px rgba(255,255,0,.25);
+}
+[data-theme="japan"] #theme-toggle:hover {
+    background: #FFFF00;
+    color: #000033;
+    border-color: #FF6600;
+    box-shadow: 0 0 14px rgba(255,255,0,.5);
+}
 
-        /* --- Markdown 内容样式 --- */
-        .markdown-body { line-height: 1.7; }
-        .markdown-body h1, .markdown-body h2, .markdown-body h3 { 
-            font-family: var(--font-sans);
-            color: var(--primary-color); 
-            font-weight: bold;
-        }
-        .markdown-body h1 { 
-            border-bottom: 2px solid #eee; 
-            padding-bottom: 10px; 
-            margin-top: 50px; 
-            margin-bottom: 25px;
-            scroll-margin-top: 80px; 
-            font-size: 1.8em;
-        }
-        .markdown-body h2 {
-            margin-top: 30px;
-            margin-bottom: 15px;
-            font-size: 1.4em;
-            color: #444;
-        }
-        .markdown-body a { color: var(--primary-color); text-decoration: none; font-weight: 500; }
-        .markdown-body a:hover { text-decoration: underline; }
-        .markdown-body ul li { margin-bottom: 10px; }
+/* ══════════════════════════════════════════════════════
+   ████  CLAUDE THEME  ████
+══════════════════════════════════════════════════════ */
+[data-theme="claude"] body {
+    display: flex;
+    background: var(--cl-bg);
+    color: var(--cl-text);
+    font-family: var(--cl-font);
+    font-size: 15px;
+    line-height: 1.6;
+}
 
-        @media (max-width: 768px) {
-            body { flex-direction: column; }
-            #sidebar { position: relative; width: 100%; height: auto; border-right: none; border-bottom: 1px solid #ddd; padding: 30px 15px; }
-            #main { margin-left: 0; padding: 20px; }
-            #top-nav { top: 0; font-size: 0.9em; padding: 15px 0; overflow-x: auto; white-space: nowrap; }
-            .contact-info { padding-left: 0; align-items: center; }
-            .contact-item { justify-content: center; width: auto; margin-right: 15px; display: inline-flex;}
-            .contact-info { display: block; text-align: center;}
-        }
+/* ── Sidebar ── */
+[data-theme="claude"] #sidebar {
+    display: flex;
+    width: var(--cl-sidebar-w);
+    min-width: var(--cl-sidebar-w);
+    background: var(--cl-surface);
+    border-right: 1px solid var(--cl-border);
+    padding: 36px 24px;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    position: fixed;
+    height: 100vh;
+    overflow-y: auto;
+    top: 0; left: 0;
+    z-index: 100;
+}
+[data-theme="claude"] #sidebar::-webkit-scrollbar { width: 4px; }
+[data-theme="claude"] #sidebar::-webkit-scrollbar-thumb { background: var(--cl-border-str); border-radius: 2px; }
+
+[data-theme="claude"] #sidebar img#avatar {
+    width: 118px; height: 118px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 16px;
+    border: 3px solid var(--cl-border);
+    box-shadow: 0 4px 16px rgba(0,0,0,0.07);
+    transition: box-shadow 0.2s, border-color 0.2s;
+}
+[data-theme="claude"] #sidebar img#avatar:hover {
+    box-shadow: 0 6px 22px rgba(217,119,87,0.2);
+    border-color: var(--cl-accent-lt);
+}
+[data-theme="claude"] #name  { font-size: 1.2rem; font-weight: 700; letter-spacing: -.3px; color: var(--cl-text); margin-bottom: 3px; }
+[data-theme="claude"] #name-cn { font-size: .85rem; color: var(--cl-text-3); margin-bottom: 10px; }
+[data-theme="claude"] .sidebar-badge {
+    display: inline-block;
+    background: var(--cl-accent-muted);
+    color: var(--cl-accent);
+    font-size: .72rem; font-weight: 600;
+    padding: 3px 10px; border-radius: 20px;
+    margin-bottom: 8px; letter-spacing: .1px;
+}
+[data-theme="claude"] #title {
+    color: var(--cl-text-2); font-size: .78rem; line-height: 1.5;
+    margin-bottom: 20px; padding: 0 4px;
+}
+[data-theme="claude"] .sidebar-divider { width: 100%; height: 1px; background: var(--cl-border); margin: 4px 0 18px; }
+[data-theme="claude"] .contact-info { width: 100%; display: flex; flex-direction: column; gap: 2px; }
+[data-theme="claude"] .contact-item {
+    display: flex; align-items: center; gap: 10px;
+    padding: 7px 10px; border-radius: var(--cl-r-sm);
+    text-decoration: none; transition: background .15s;
+}
+[data-theme="claude"] .contact-item:hover { background: var(--cl-bg); }
+[data-theme="claude"] .contact-item i { width: 16px; font-size: .82rem; color: var(--cl-accent); flex-shrink: 0; text-align: center; }
+[data-theme="claude"] .contact-item span { font-size: .82rem; color: var(--cl-text-2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+[data-theme="claude"] .contact-item:hover span { color: var(--cl-text); }
+
+/* ── Main ── */
+[data-theme="claude"] #main {
+    margin-left: var(--cl-sidebar-w);
+    padding: 0 64px 60px 56px;
+    width: 100%;
+    max-width: 1080px;
+    font-size: 15px;
+}
+[data-theme="claude"] #top-nav {
+    display: flex;
+    position: sticky; top: 0;
+    background: rgba(250,249,247,0.92);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    padding: 15px 0; margin-bottom: 40px;
+    border-bottom: 1px solid var(--cl-border);
+    z-index: 10; flex-wrap: wrap; gap: 4px;
+}
+[data-theme="claude"] #top-nav a {
+    color: var(--cl-text-2); text-decoration: none; font-weight: 500; font-size: .83rem;
+    padding: 5px 12px; border-radius: var(--cl-r-sm); cursor: pointer;
+    transition: background .15s, color .15s;
+}
+[data-theme="claude"] #top-nav a:hover { color: var(--cl-text); background: var(--cl-accent-muted); }
+[data-theme="claude"] #top-nav a.active { color: var(--cl-accent); background: var(--cl-accent-muted); }
+
+/* ── Claude: Markdown ── */
+[data-theme="claude"] .markdown-body { line-height: 1.75; }
+[data-theme="claude"] .markdown-body h1 {
+    font-size: 1.15rem; font-weight: 700; color: var(--cl-text);
+    margin-top: 52px; margin-bottom: 20px;
+    padding-bottom: 12px; border-bottom: 1px solid var(--cl-border);
+    scroll-margin-top: 72px; letter-spacing: -.2px;
+}
+[data-theme="claude"] .markdown-body h2 {
+    font-size: .95rem; font-weight: 600; color: var(--cl-text-2);
+    margin-top: 28px; margin-bottom: 10px;
+}
+[data-theme="claude"] .markdown-body p { color: var(--cl-text-2); margin-bottom: 14px; }
+[data-theme="claude"] .markdown-body p strong { color: var(--cl-text); }
+[data-theme="claude"] .markdown-body a { color: var(--cl-accent); text-decoration: none; font-weight: 500; border-bottom: 1px solid transparent; transition: border-color .15s; }
+[data-theme="claude"] .markdown-body a:hover { border-bottom-color: var(--cl-accent-lt); }
+[data-theme="claude"] .markdown-body ul { list-style: none; padding: 0; display: flex; flex-direction: column; gap: 10px; }
+[data-theme="claude"] .markdown-body ul li {
+    position: relative;
+    padding: 14px 16px 14px 20px;
+    background: var(--cl-surface);
+    border: 1px solid var(--cl-border);
+    border-radius: var(--cl-r);
+    color: var(--cl-text-2); font-size: .9rem; line-height: 1.65;
+    transition: border-color .15s, box-shadow .15s;
+}
+[data-theme="claude"] .markdown-body ul li::before {
+    content: '';
+    position: absolute; left: 0; top: 50%; transform: translateY(-50%);
+    width: 3px; height: 60%;
+    background: var(--cl-border-str); border-radius: 2px;
+    transition: background .15s;
+}
+[data-theme="claude"] .markdown-body ul li:hover { border-color: var(--cl-accent-lt); box-shadow: 0 2px 12px rgba(217,119,87,.07); }
+[data-theme="claude"] .markdown-body ul li:hover::before { background: var(--cl-accent); }
+[data-theme="claude"] .markdown-body ul li strong { color: var(--cl-text); font-weight: 600; }
+[data-theme="claude"] .markdown-body ul li em { color: var(--cl-text-3); font-style: normal; font-size: .85rem; }
+[data-theme="claude"] .markdown-body code { font-family: 'SF Mono','Fira Code',monospace; background: var(--cl-accent-muted); color: var(--cl-accent); padding: 1px 6px; border-radius: 4px; font-size: .85em; }
+
+/* ── Claude: Footer ── */
+[data-theme="claude"] #footer {
+    margin-top: 72px; padding-top: 20px;
+    border-top: 1px solid var(--cl-border);
+    color: var(--cl-text-3); font-size: .78rem;
+    display: flex; align-items: center; gap: 6px;
+}
+[data-theme="claude"] #footer::before { content: ''; display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: var(--cl-accent); flex-shrink: 0; }
+
+/* ── Hide Apple-only elements in Claude ── */
+[data-theme="claude"] #apple-nav { display: none !important; }
+[data-theme="claude"] #hero      { display: none !important; }
+[data-theme="claude"] #sidebar   { display: flex; }
+[data-theme="claude"] #top-nav   { display: flex; }
+
+
+/* ══════════════════════════════════════════════════════
+   ████  APPLE THEME  ████
+══════════════════════════════════════════════════════ */
+[data-theme="apple"] body {
+    display: block;
+    background: var(--ap-bg);
+    color: var(--ap-text);
+    font-family: var(--ap-font);
+    font-size: 17px;
+    line-height: 1.6;
+}
+
+/* ── Hide Claude-only elements in Apple ── */
+[data-theme="apple"] #sidebar  { display: none !important; }
+[data-theme="apple"] #top-nav  { display: none !important; }
+
+/* ── Apple Fixed Nav ── */
+[data-theme="apple"] #apple-nav {
+    display: flex;
+    position: fixed; top: 0; left: 0; right: 0;
+    height: var(--ap-nav-h);
+    background: rgba(255,255,255,0.78);
+    backdrop-filter: saturate(200%) blur(24px);
+    -webkit-backdrop-filter: saturate(200%) blur(24px);
+    border-bottom: 1px solid var(--ap-border);
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+    padding: 0 100px 0 24px; /* right padding leaves room for toggle btn */
+}
+#apple-nav-links {
+    display: flex; align-items: center; gap: 2px;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+}
+#apple-nav-links::-webkit-scrollbar { display: none; }
+#apple-nav-links a {
+    color: var(--ap-text-2); text-decoration: none;
+    font-size: .8rem; font-weight: 500; white-space: nowrap;
+    padding: 5px 13px; border-radius: 20px;
+    cursor: pointer;
+    transition: background .15s, color .15s;
+}
+#apple-nav-links a:hover { background: var(--ap-surface); color: var(--ap-text); }
+#apple-nav-links a.active { background: var(--ap-surface); color: var(--ap-text); font-weight: 600; }
+
+/* ── Hero ── */
+[data-theme="apple"] #hero {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100svh;
+    padding: calc(var(--ap-nav-h) + 60px) 24px 100px;
+    text-align: center;
+    background: radial-gradient(ellipse 80% 60% at 50% -10%, rgba(0,113,227,0.07) 0%, transparent 70%),
+                linear-gradient(180deg, #F5F5F7 0%, #FFFFFF 55%);
+    position: relative;
+    overflow: hidden;
+}
+[data-theme="apple"] #hero::after {
+    content: '';
+    position: absolute; bottom: 0; left: 50%; transform: translateX(-50%);
+    width: 60%; height: 1px;
+    background: linear-gradient(90deg, transparent, var(--ap-border), transparent);
+}
+
+#hero-eyebrow {
+    font-size: .8rem; font-weight: 600;
+    letter-spacing: .12em; text-transform: uppercase;
+    color: var(--ap-accent); margin-bottom: 24px;
+}
+#hero-name {
+    font-size: clamp(56px, 9vw, 108px);
+    font-weight: 700; letter-spacing: -.04em; line-height: 1.0;
+    color: var(--ap-text); margin-bottom: 10px;
+}
+#hero-name-cn {
+    font-size: clamp(18px, 2.8vw, 26px);
+    font-weight: 300; color: var(--ap-text-2);
+    letter-spacing: .06em; margin-bottom: 28px;
+}
+#hero-tagline {
+    font-size: clamp(16px, 2.2vw, 21px);
+    font-weight: 400; color: var(--ap-text-2);
+    max-width: 560px; line-height: 1.55;
+    margin-bottom: 12px;
+}
+#hero-meta {
+    font-size: .88rem; color: var(--ap-text-3);
+    margin-bottom: 44px; letter-spacing: .01em;
+}
+#hero-links { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; }
+.hero-btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 12px 24px; border-radius: 980px;
+    font-size: .88rem; font-weight: 500; text-decoration: none;
+    transition: transform .18s, box-shadow .18s, background .18s;
+}
+.hero-btn.primary { background: var(--ap-text); color: #fff; }
+.hero-btn.primary:hover { background: #333; transform: scale(1.02); box-shadow: 0 4px 20px rgba(0,0,0,0.18); }
+.hero-btn.secondary { background: transparent; color: var(--ap-accent); border: 1.5px solid rgba(0,113,227,.3); }
+.hero-btn.secondary:hover { background: var(--ap-accent-muted); border-color: transparent; transform: scale(1.02); }
+
+#hero-scroll {
+    position: absolute; bottom: 36px; left: 50%; transform: translateX(-50%);
+    color: var(--ap-text-3); font-size: .72rem; letter-spacing: .06em;
+    display: flex; flex-direction: column; align-items: center; gap: 6px;
+    animation: hero-bounce 2.4s ease-in-out infinite;
+}
+@keyframes hero-bounce {
+    0%,100% { transform: translateX(-50%) translateY(0); }
+    55% { transform: translateX(-50%) translateY(8px); }
+}
+
+/* ── Apple: Main & Content Wrapper ── */
+[data-theme="apple"] #main { margin-left: 0; padding: 0; width: 100%; max-width: none; }
+[data-theme="apple"] #content-wrapper { max-width: 920px; margin: 0 auto; padding: 0 48px 100px; }
+
+/* ── Apple: Markdown ── */
+[data-theme="apple"] .markdown-body { line-height: 1.72; }
+[data-theme="apple"] .markdown-body h1 {
+    font-size: clamp(30px, 4.5vw, 48px);
+    font-weight: 700; letter-spacing: -.03em; line-height: 1.08;
+    color: var(--ap-text);
+    margin-top: 110px; margin-bottom: 36px;
+    scroll-margin-top: calc(var(--ap-nav-h) + 24px);
+}
+[data-theme="apple"] .markdown-body h2 {
+    font-size: 1.15rem; font-weight: 600; color: var(--ap-text);
+    margin-top: 40px; margin-bottom: 16px; letter-spacing: -.01em;
+}
+[data-theme="apple"] .markdown-body p {
+    font-size: .98rem; color: var(--ap-text-2); margin-bottom: 16px; max-width: 700px;
+}
+[data-theme="apple"] .markdown-body p strong { color: var(--ap-text); font-weight: 600; }
+[data-theme="apple"] .markdown-body a { color: var(--ap-accent); text-decoration: none; }
+[data-theme="apple"] .markdown-body a:hover { text-decoration: underline; }
+[data-theme="apple"] .markdown-body ul { list-style: none; padding: 0; display: flex; flex-direction: column; gap: 12px; }
+[data-theme="apple"] .markdown-body ul li {
+    padding: 20px 24px;
+    background: var(--ap-surface);
+    border-radius: var(--ap-r);
+    font-size: .92rem; color: var(--ap-text-2); line-height: 1.65;
+    transition: transform .22s cubic-bezier(.25,.46,.45,.94), box-shadow .22s;
+}
+[data-theme="apple"] .markdown-body ul li:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.07);
+}
+[data-theme="apple"] .markdown-body ul li strong { color: var(--ap-text); font-weight: 600; }
+[data-theme="apple"] .markdown-body ul li em { font-style: normal; font-size: .84rem; color: var(--ap-text-3); }
+[data-theme="apple"] .markdown-body code { font-family: 'SF Mono','Fira Code',monospace; background: var(--ap-surface); color: var(--ap-text); padding: 2px 6px; border-radius: 5px; font-size: .85em; }
+[data-theme="apple"] .markdown-body sup { font-size: .7em; vertical-align: super; }
+
+/* ── Apple: Scroll Fade-Up ── */
+[data-theme="apple"] .fade-up {
+    opacity: 0;
+    transform: translateY(22px);
+    transition: opacity .6s ease, transform .6s ease;
+}
+[data-theme="apple"] .fade-up.visible { opacity: 1; transform: translateY(0); }
+
+/* ── Apple: Footer ── */
+[data-theme="apple"] #footer {
+    max-width: 920px; margin: 0 auto;
+    padding: 24px 48px 56px;
+    border-top: 1px solid var(--ap-border);
+    color: var(--ap-text-3); font-size: .78rem;
+    font-family: var(--ap-font);
+}
+
+/* ── Apple nav hidden in Claude ── */
+[data-theme="claude"] #apple-nav { display: none !important; }
+
+/* ── Content wrapper: no extra style in Claude ── */
+[data-theme="claude"] #content-wrapper { /* inherits #main padding */ }
+
+/* ══════════════════════════════════════════════════════
+   ████  JAPAN 90s THEME  ████
+══════════════════════════════════════════════════════ */
+[data-theme="japan"] body {
+    display: flex;
+    flex-direction: row;
+    background: #000033;
+    color: #FFFFFF;
+    font-family: var(--jp-font);
+    font-size: 12px;
+    line-height: 1.55;
+}
+
+/* ── Hide / Show elements ── */
+[data-theme="japan"] #apple-nav  { display: none !important; }
+[data-theme="japan"] #hero       { display: none !important; }
+[data-theme="japan"] #sidebar    { display: flex !important; }
+[data-theme="japan"] #top-nav    { display: flex !important; }
+[data-theme="claude"] #japan-banner,
+[data-theme="apple"]  #japan-banner { display: none !important; }
+
+/* ── Japan Banner ── */
+[data-theme="japan"] #japan-banner {
+    display: block;
+    background: #000055;
+    border-bottom: 4px solid;
+    border-image: linear-gradient(90deg,#FF0066,#FF6600,#FFFF00,#00FF99,#00FFFF,#0066FF,#9900FF) 1;
+}
+.jp-marquee-wrap {
+    overflow: hidden;
+    white-space: nowrap;
+    background: #000;
+    padding: 2px 0;
+    border-bottom: 1px solid #222266;
+}
+.jp-marquee-text {
+    display: inline-block;
+    animation: jp-scroll 24s linear infinite;
+    font-size: 11px;
+    color: #00FFFF;
+    padding-left: 100%;
+    white-space: nowrap;
+}
+@keyframes jp-scroll {
+    from { transform: translateX(0); }
+    to   { transform: translateX(-100%); }
+}
+.jp-header-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 7px 14px;
+    flex-wrap: wrap;
+}
+.jp-site-title {
+    flex: 1;
+    text-align: center;
+    font-size: 1rem;
+    font-weight: bold;
+    color: #FFFF00;
+    letter-spacing: .1em;
+    text-shadow: 0 0 10px rgba(255,255,0,.6);
+}
+@keyframes jp-blink {
+    0%,49%  { opacity: 1; }
+    50%,100%{ opacity: 0; }
+}
+.jp-blink { animation: jp-blink 1.1s step-end infinite; color: #FF6699; font-size: 1.1rem; }
+.jp-counter {
+    font-size: 10px;
+    color: #00FF99;
+    border: 1px solid #00FF99;
+    padding: 2px 7px;
+    font-family: monospace;
+    letter-spacing: .06em;
+    white-space: nowrap;
+}
+.jp-rainbow-rule {
+    height: 3px;
+    background: linear-gradient(90deg,#FF0066,#FF6600,#FFFF00,#00FF99,#00FFFF,#0066FF,#9900FF,#FF0066);
+}
+
+/* ── Japan Sidebar ── */
+[data-theme="japan"] #sidebar {
+    position: sticky !important;
+    top: 0 !important;
+    left: auto !important;
+    width: 170px !important;
+    min-width: 170px !important;
+    height: 100vh !important;
+    overflow-y: auto !important;
+    background: #000055 !important;
+    border-right: 2px solid #FFFF00 !important;
+    padding: 10px 8px !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    z-index: 100;
+    scrollbar-width: thin;
+    scrollbar-color: #333399 #000033;
+}
+[data-theme="japan"] #sidebar::-webkit-scrollbar { width: 4px; }
+[data-theme="japan"] #sidebar::-webkit-scrollbar-thumb { background: #333399; }
+[data-theme="japan"] #avatar {
+    width: 84px !important;
+    height: 84px !important;
+    border-radius: 0 !important;
+    border: 2px solid #FF6600 !important;
+    box-shadow: none !important;
+    margin-bottom: 8px !important;
+}
+[data-theme="japan"] #avatar:hover {
+    border-color: #FFFF00 !important;
+    box-shadow: 0 0 10px rgba(255,255,0,.4) !important;
+}
+[data-theme="japan"] #name {
+    font-size: .82rem !important;
+    font-weight: bold !important;
+    color: #FFFF00 !important;
+    letter-spacing: .06em !important;
+    margin-bottom: 2px !important;
+}
+[data-theme="japan"] #name-cn {
+    font-size: .78rem !important;
+    color: #00FFFF !important;
+    margin-bottom: 4px !important;
+}
+[data-theme="japan"] .sidebar-badge {
+    background: #CC0055 !important;
+    color: #FFFFFF !important;
+    font-size: .66rem !important;
+    border-radius: 0 !important;
+    padding: 2px 8px !important;
+    margin-bottom: 4px !important;
+    border: 1px solid #FF6699 !important;
+}
+[data-theme="japan"] #title {
+    color: #9999FF !important;
+    font-size: .68rem !important;
+    margin-bottom: 10px !important;
+    padding: 0 !important;
+    line-height: 1.45 !important;
+}
+[data-theme="japan"] .sidebar-divider {
+    height: 2px !important;
+    background: linear-gradient(90deg,#FF0066,#FFFF00,#00FF99) !important;
+    margin: 6px 0 10px !important;
+    width: 100% !important;
+}
+[data-theme="japan"] .contact-info {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 0 !important;
+    width: 100% !important;
+}
+[data-theme="japan"] .contact-info::before {
+    content: '◆ MENU ◆';
+    display: block;
+    color: #FFFF00;
+    font-size: .68rem;
+    font-weight: bold;
+    text-align: center;
+    letter-spacing: .1em;
+    margin-bottom: 5px;
+    padding: 2px 0;
+    border-top: 1px solid #333366;
+    border-bottom: 1px solid #333366;
+}
+[data-theme="japan"] .contact-item {
+    display: flex !important;
+    align-items: center !important;
+    width: 100% !important;
+    text-decoration: none !important;
+    padding: 4px 6px !important;
+    border-radius: 0 !important;
+    border: none !important;
+    border-bottom: 1px solid #111155 !important;
+    margin-bottom: 0 !important;
+    gap: 7px !important;
+}
+[data-theme="japan"] .contact-item:hover  { background: #001188 !important; }
+[data-theme="japan"] .contact-item i      { color: #FF6699 !important; font-size: .75rem !important; }
+[data-theme="japan"] .contact-item span   {
+    color: #00CCFF !important;
+    font-size: .72rem !important;
+    text-decoration: underline;
+    white-space: normal !important;
+    overflow: visible !important;
+    text-overflow: clip !important;
+}
+[data-theme="japan"] .contact-item:hover span { color: #FFFFFF !important; }
+
+/* ── Japan Main ── */
+[data-theme="japan"] #main {
+    margin-left: 0 !important;
+    padding: 0 14px 40px !important;
+    flex: 1 !important;
+    min-width: 0 !important;
+    max-width: none !important;
+    font-size: 12px;
+}
+[data-theme="japan"] #content-wrapper {
+    max-width: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+/* ── Japan Top Nav ── */
+[data-theme="japan"] #top-nav {
+    background: #000066 !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    padding: 3px 0 !important;
+    margin-bottom: 12px !important;
+    border-top: 2px solid #00FFFF !important;
+    border-bottom: 2px solid #FF0066 !important;
+    gap: 0 !important;
+    position: relative !important;
+    top: auto !important;
+    flex-wrap: wrap !important;
+}
+[data-theme="japan"] #top-nav a {
+    color: #FFFF00 !important;
+    font-size: .72rem !important;
+    font-weight: bold !important;
+    padding: 3px 10px !important;
+    border-radius: 0 !important;
+    border-right: 1px solid #222266 !important;
+    letter-spacing: .05em !important;
+    transition: none !important;
+}
+[data-theme="japan"] #top-nav a:hover  { background: #FF0066 !important; color: #FFFFFF !important; }
+[data-theme="japan"] #top-nav a.active { background: #FFFF00 !important; color: #000033 !important; }
+
+/* ── Japan Markdown ── */
+[data-theme="japan"] .markdown-body { line-height: 1.6; }
+[data-theme="japan"] .markdown-body h1 {
+    font-size: .9rem !important;
+    font-weight: bold !important;
+    color: #000033 !important;
+    background: #FFFF00 !important;
+    margin-top: 20px !important;
+    margin-bottom: 8px !important;
+    padding: 4px 10px !important;
+    border: none !important;
+    border-left: 5px solid #FF0066 !important;
+    border-bottom: none !important;
+    scroll-margin-top: 10px !important;
+    letter-spacing: .06em !important;
+}
+[data-theme="japan"] .markdown-body h1::before {
+    content: '■ ';
+    color: #CC0044;
+}
+[data-theme="japan"] .markdown-body h2 {
+    font-size: .8rem !important;
+    font-weight: bold !important;
+    color: #00FFFF !important;
+    margin-top: 14px !important;
+    margin-bottom: 6px !important;
+}
+[data-theme="japan"] .markdown-body h2::before { content: '▶ '; color: #FF6600; }
+[data-theme="japan"] .markdown-body p {
+    color: #CCCCDD !important;
+    font-size: .83rem !important;
+    margin-bottom: 8px !important;
+    max-width: none !important;
+}
+[data-theme="japan"] .markdown-body p strong { color: #FFFF00 !important; }
+[data-theme="japan"] .markdown-body a {
+    color: #00CCFF !important;
+    text-decoration: underline !important;
+    font-weight: normal !important;
+    border-bottom: none !important;
+}
+[data-theme="japan"] .markdown-body a:hover {
+    color: #FFFF00 !important;
+    background: rgba(255,255,0,.1) !important;
+    border-bottom: none !important;
+}
+[data-theme="japan"] .markdown-body ul { gap: 2px !important; }
+[data-theme="japan"] .markdown-body ul li {
+    padding: 6px 10px !important;
+    background: #000044 !important;
+    border: 1px solid #111166 !important;
+    border-left: 3px solid #FF6600 !important;
+    border-radius: 0 !important;
+    color: #BBBBCC !important;
+    font-size: .82rem !important;
+    line-height: 1.5 !important;
+    box-shadow: none !important;
+    transition: none !important;
+}
+[data-theme="japan"] .markdown-body ul li::before { display: none !important; }
+[data-theme="japan"] .markdown-body ul li:hover {
+    background: #000066 !important;
+    border-color: #00FFFF !important;
+    border-left-color: #FFFF00 !important;
+    box-shadow: none !important;
+}
+[data-theme="japan"] .markdown-body ul li strong { color: #FFFF00 !important; }
+[data-theme="japan"] .markdown-body ul li em {
+    color: #FF99CC !important;
+    font-style: normal !important;
+    font-size: .78rem !important;
+}
+[data-theme="japan"] .markdown-body code {
+    background: #001100 !important;
+    color: #00FF00 !important;
+    border: 1px solid #006600 !important;
+    padding: 1px 4px !important;
+    border-radius: 0 !important;
+    font-family: 'MS Gothic','Courier New',monospace !important;
+}
+
+/* ── Japan Footer ── */
+[data-theme="japan"] #footer {
+    margin-top: 24px !important;
+    padding-top: 8px !important;
+    border-top: 2px dashed #333366 !important;
+    color: #666699 !important;
+    font-size: .7rem !important;
+    display: block !important;
+}
+[data-theme="japan"] #footer::before {
+    content: '' !important;
+    display: none !important;
+}
+
+/* ── Japan Responsive ── */
+@media (max-width: 640px) {
+    [data-theme="japan"] body { flex-direction: column; }
+    [data-theme="japan"] #sidebar {
+        position: relative !important;
+        width: 100% !important;
+        min-width: unset !important;
+        height: auto !important;
+        border-right: none !important;
+        border-bottom: 2px solid #FFFF00 !important;
+        flex-direction: row !important;
+        flex-wrap: wrap !important;
+        padding: 8px !important;
+    }
+    [data-theme="japan"] #main { padding: 0 8px 20px !important; }
+}
+
+/* ══════════════════════════════════════════════════════
+   ERROR BOX
+══════════════════════════════════════════════════════ */
+.error-box {
+    max-width: 600px; margin: 40px auto;
+    padding: 24px; background: #fff;
+    border: 1px solid #eee; border-left: 3px solid #D97757; border-radius: 10px;
+    font-family: 'Inter', sans-serif;
+}
+.error-box pre { background: #f5f5f5; padding: 10px 14px; border-radius: 6px; font-size: .82rem; margin: 10px 0; overflow-x: auto; }
+.error-box a { color: #0071E3; }
+
+/* ══════════════════════════════════════════════════════
+   RESPONSIVE
+══════════════════════════════════════════════════════ */
+@media (max-width: 860px) {
+    /* Claude mobile */
+    [data-theme="claude"] body { flex-direction: column; }
+    [data-theme="claude"] #sidebar {
+        position: relative; width: 100%; height: auto;
+        border-right: none; border-bottom: 1px solid var(--cl-border);
+        padding: 28px 20px 24px;
+    }
+    [data-theme="claude"] #main { margin-left: 0; padding: 20px 20px 48px; }
+    [data-theme="claude"] #top-nav { overflow-x: auto; flex-wrap: nowrap; -webkit-overflow-scrolling: touch; }
+    [data-theme="claude"] #top-nav::-webkit-scrollbar { display: none; }
+    /* Apple mobile */
+    [data-theme="apple"] #apple-nav { padding-right: 110px; }
+    [data-theme="apple"] #content-wrapper { padding: 0 20px 60px; }
+    [data-theme="apple"] #footer { padding: 24px 20px 48px; }
+    #theme-toggle { top: 12px; right: 12px; }
+    #hero-name { font-size: clamp(44px, 12vw, 80px); }
+}
+@media (max-width: 540px) {
+    .hero-btn { padding: 11px 18px; font-size: .82rem; }
+    #hero-links { gap: 10px; }
+}
     </style>
 </head>
 <body>
 
-    <aside id="sidebar">
-        </aside>
+<!-- ── Theme Toggle ── -->
+<button id="theme-toggle" aria-label="Switch theme">
+    <span class="tg-icon"></span>
+    <span class="tg-text"></span>
+</button>
 
-    <main id="main">
-        <nav id="top-nav"></nav>
-        <div id="content" class="markdown-body">
-            Loading content...
+<!-- ── Claude: Sidebar ── -->
+<aside id="sidebar"></aside>
+
+<!-- ── Apple: Fixed Nav ── -->
+<nav id="apple-nav" aria-label="Site navigation">
+    <div id="apple-nav-links"></div>
+</nav>
+
+<!-- ── Main ── -->
+<main id="main">
+
+    <!-- Japan 90s: Banner -->
+    <div id="japan-banner">
+        <div class="jp-marquee-wrap"><span class="jp-marquee-text"></span></div>
+        <div class="jp-header-row">
+            <span class="jp-blink">★</span>
+            <span class="jp-site-title"></span>
+            <span class="jp-blink">★</span>
+            <span class="jp-counter">ACCESS：<span id="jp-counter-val">000000</span></span>
         </div>
-        <footer style="margin-top: 60px; color: #aaa; font-size: 0.85em; border-top: 1px solid #eee; padding-top: 20px; font-family: var(--font-sans);">
-            &copy; <span id="year"></span> <span id="footer-name"></span>.
-        </footer>
-    </main>
+        <div class="jp-rainbow-rule"></div>
+    </div>
 
-    <script>
-        async function loadSite() {
-            try {
-                // 1. 加载 Config
-                const configRes = await fetch('config.yaml');
-                if (!configRes.ok) throw new Error("无法加载 config.yaml");
-                const config = jsyaml.load(await configRes.text());
-                applyConfig(config);
+    <!-- Claude breadcrumb nav -->
+    <nav id="top-nav" aria-label="Sections"></nav>
 
-                // 2. 加载 Content
-                const contentRes = await fetch('content.md');
-                if (!contentRes.ok) throw new Error("无法加载 content.md");
-                const contentText = await contentRes.text();
-                
-                // 3. 渲染 Markdown
-                const contentDiv = document.getElementById('content');
-                contentDiv.innerHTML = marked.parse(contentText);
-                
-                // 4. 生成导航
-                generateNavigation();
-                
-                // 5. 渲染公式 (修复版)
-                if (window.MathJax && window.MathJax.typesetPromise) {
-                    window.MathJax.typesetPromise().catch((err) => console.log('MathJax error:', err));
-                }
+    <!-- Apple Hero -->
+    <section id="hero" aria-label="Introduction">
+        <div id="hero-eyebrow">Ph.D. Candidate</div>
+        <h1 id="hero-name"></h1>
+        <p id="hero-name-cn"></p>
+        <p id="hero-tagline">Advancing speaker recognition through robust learning under noisy labels.</p>
+        <p id="hero-meta"></p>
+        <div id="hero-links"></div>
+        <div id="hero-scroll" aria-hidden="true">
+            <i class="fas fa-chevron-down"></i>
+        </div>
+    </section>
 
-            } catch (e) {
-                console.error(e);
-                document.getElementById('content').innerHTML = 
-                    `<div style="color: #721c24; background-color: #f8d7da; border: 1px solid #f5c6cb; padding: 20px; border-radius: 5px; font-family: sans-serif;">
-                        <h3 style="margin-top:0"><i class="fas fa-exclamation-triangle"></i> Error loading site</h3>
-                        <p>${e.message}</p>
-                        <hr>
-                        <p><strong>原因：</strong> 浏览器禁止本地文件（file://）跨域读取 config.yaml。</p>
-                        <p><strong>解决方法：</strong> 请在文件夹中打开终端/命令行，运行以下命令启动本地服务器：</p>
-                        <pre style="background:#eee; padding:10px;">python -m http.server</pre>
-                        <p>然后在浏览器打开 <a href="http://localhost:8000">http://localhost:8000</a></p>
-                    </div>`;
-            }
+    <!-- Content -->
+    <div id="content-wrapper">
+        <article id="content" class="markdown-body">Loading…</article>
+    </div>
+
+    <footer id="footer">
+        &copy; <span id="year"></span> <span id="footer-name"></span>. All rights reserved.
+    </footer>
+
+</main>
+
+<script>
+/* ── State ─────────────────────────────────── */
+const _THEMES = ['claude', 'apple', 'japan'];
+let THEME = localStorage.getItem('site-theme') || 'claude';
+let scrollObserver = null;
+
+/* ── Boot ──────────────────────────────────── */
+applyTheme(THEME, false);
+setupToggle();
+loadSite();
+
+/* ── Load site data ─────────────────────────── */
+async function loadSite() {
+    try {
+        const [cfgRes, mdRes] = await Promise.all([fetch('config.yaml'), fetch('content.md')]);
+        if (!cfgRes.ok) throw new Error('Cannot load config.yaml');
+        if (!mdRes.ok)  throw new Error('Cannot load content.md');
+
+        const cfg = jsyaml.load(await cfgRes.text());
+        applyConfig(cfg);
+
+        document.getElementById('content').innerHTML = marked.parse(await mdRes.text());
+        wrapHeadingEmoji();
+        buildNav();
+        setupScrollSpy();
+        if (THEME === 'apple') setupFadeAnimations();
+
+        if (window.MathJax?.typesetPromise)
+            window.MathJax.typesetPromise().catch(e => console.warn('MathJax:', e));
+
+    } catch (e) {
+        console.error(e);
+        document.getElementById('content').innerHTML = `
+            <div class="error-box">
+                <h3 style="margin-bottom:10px"><i class="fas fa-exclamation-circle"></i> Error loading site</h3>
+                <p>${e.message}</p>
+                <p style="margin-top:14px;opacity:.7">Start a local server:</p>
+                <pre>python3 -m http.server 8000</pre>
+                <p>Then open <a href="http://localhost:8000">http://localhost:8000</a></p>
+            </div>`;
+    }
+}
+
+/* ── Populate sidebar + hero ─────────────────── */
+function applyConfig(cfg) {
+    const p = cfg.params || {};
+    document.title = cfg.title || 'Academic Homepage';
+
+    let nameEn = p.name || '';
+    let nameCn = '';
+    const m = p.name?.match(/(.*)\((.*)\)/);
+    if (m) { nameEn = m[1].trim(); nameCn = m[2].trim(); }
+
+    document.getElementById('footer-name').textContent = nameEn;
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    if (p.favicon) {
+        const link = document.querySelector("link[rel~='icon']") || Object.assign(document.createElement('link'), {rel:'icon'});
+        link.href = p.favicon;
+        document.head.appendChild(link);
+    }
+
+    /* Claude sidebar */
+    document.getElementById('sidebar').innerHTML = `
+        <img id="avatar" src="${p.avatar || 'assets/avatar.jpg'}" alt="Profile photo">
+        <div style="width:100%;display:flex;flex-direction:column;align-items:center">
+            <div id="name">${nameEn}</div>
+            ${nameCn ? `<div id="name-cn">${nameCn}</div>` : ''}
+            <div class="sidebar-badge">Ph.D. Candidate</div>
+            <div id="title">${[p.organization, p.location].filter(Boolean).join(' · ')}</div>
+        </div>
+        <div class="sidebar-divider"></div>
+        <div class="contact-info">
+            ${(p.social||[]).map(s => `
+                <a class="contact-item" href="${s.link}" target="_blank" rel="noopener">
+                    <i class="${s.text?.toLowerCase().includes('scholar') ? 'ai ai-google-scholar' : s.icon}"></i>
+                    <span>${s.text||'Link'}</span>
+                </a>`).join('')}
+        </div>`;
+
+    /* Apple hero */
+    document.getElementById('hero-name').textContent = nameEn;
+    document.getElementById('hero-name-cn').textContent = nameCn;
+    document.getElementById('hero-meta').textContent =
+        [p.role, p.organization, p.location].filter(Boolean).join(' · ');
+
+    document.getElementById('hero-links').innerHTML = (p.social||[]).map((s, i) => {
+        const icon = s.text?.toLowerCase().includes('scholar') ? 'ai ai-google-scholar' : s.icon;
+        return `<a class="hero-btn ${i===0?'primary':'secondary'}" href="${s.link}" target="_blank" rel="noopener">
+                    <i class="${icon}"></i>${s.text||'Link'}
+                </a>`;
+    }).join('');
+
+    /* Japan banner */
+    const jpMarqParts = [nameEn, nameCn, p.role, p.organization, p.location,
+        '★ Welcome to my homepage! ★', nameEn, p.role].filter(Boolean);
+    const jpMarqEl = document.querySelector('.jp-marquee-text');
+    if (jpMarqEl) jpMarqEl.textContent = jpMarqParts.join('　｜　');
+    const jpTitleEl = document.querySelector('.jp-site-title');
+    if (jpTitleEl) jpTitleEl.textContent = nameEn + (nameCn ? '（' + nameCn + '）' : '');
+    const jpCounter = document.getElementById('jp-counter-val');
+    if (jpCounter) jpCounter.textContent = String(Math.floor(Math.random() * 89999) + 10000);
+}
+
+/* ── Wrap emoji in headings for per-theme display ── */
+function wrapHeadingEmoji() {
+    document.querySelectorAll('#content h1').forEach(h => {
+        h.innerHTML = h.innerHTML.replace(
+            /^(<[^>]+>)*([\u{1F300}-\u{1FFFF}\u{2600}-\u{27BF}]\S*\s*)/u,
+            (_, tags, emoji) => `${tags||''}<span class="h-emoji">${emoji}</span>`
+        );
+    });
+}
+
+/* ── Build navigation (both navs) ──────────────── */
+function buildNav() {
+    const headers = [...document.querySelectorAll('#content h1')];
+    const topNav   = document.getElementById('top-nav');
+    const appleNav = document.getElementById('apple-nav-links');
+    topNav.innerHTML = appleNav.innerHTML = '';
+
+    if (!headers.length) { topNav.style.display = 'none'; return; }
+
+    headers.forEach((h, i) => {
+        if (!h.id) h.id = 'sec-' + i;
+        const label = h.textContent.replace(/^[\p{Emoji}\s]+/u, '').trim();
+        const scrollTo = () => {
+            const offset = THEME === 'apple' ? parseInt(getComputedStyle(document.documentElement).getPropertyValue('--ap-nav-h')) + 16 : 72;
+            window.scrollTo({ top: h.getBoundingClientRect().top + scrollY - offset, behavior: 'smooth' });
+        };
+        [topNav, appleNav].forEach(nav => {
+            const a = document.createElement('a');
+            a.href = '#' + h.id; a.textContent = label;
+            a.onclick = e => { e.preventDefault(); scrollTo(); };
+            nav.appendChild(a);
+        });
+    });
+}
+
+/* ── Scroll spy ────────────────────────────────── */
+function setupScrollSpy() {
+    const headers = [...document.querySelectorAll('#content h1')];
+    if (!headers.length) return;
+    const allLinks = () => [...document.querySelectorAll('#top-nav a, #apple-nav-links a')];
+    const observer = new IntersectionObserver(entries => {
+        entries.forEach(e => {
+            if (!e.isIntersecting) return;
+            const idx = headers.indexOf(e.target);
+            allLinks().forEach((a,i) => a.classList.toggle('active', i===idx));
+        });
+    }, { rootMargin: '-72px 0px -60% 0px' });
+    headers.forEach(h => observer.observe(h));
+}
+
+/* ── Apple scroll fade animations ─────────────── */
+function setupFadeAnimations() {
+    if (scrollObserver) scrollObserver.disconnect();
+    const items = [...document.querySelectorAll('#content h1, #content ul li, #content > .markdown-body > p')];
+    items.forEach((el, idx) => {
+        el.classList.add('fade-up');
+        if (el.tagName === 'LI') {
+            const sIdx = [...el.parentElement.querySelectorAll('li')].indexOf(el);
+            el.style.transitionDelay = `${sIdx * 0.045}s`;
         }
+        const rect = el.getBoundingClientRect();
+        if (rect.top < window.innerHeight && rect.bottom > 0) el.classList.add('visible');
+    });
+    scrollObserver = new IntersectionObserver(entries => {
+        entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+    }, { rootMargin: '-32px 0px' });
+    items.forEach(el => scrollObserver.observe(el));
+}
 
-        function applyConfig(cfg) {
-            const r = document.querySelector(':root');
-            if(cfg.params?.primary_color) r.style.setProperty('--primary-color', cfg.params.primary_color);
-            const p = cfg.params || {};
+function clearFadeAnimations() {
+    if (scrollObserver) { scrollObserver.disconnect(); scrollObserver = null; }
+    document.querySelectorAll('.fade-up').forEach(el => {
+        el.classList.remove('fade-up', 'visible');
+        el.style.transitionDelay = '';
+    });
+}
 
-            document.title = cfg.title || "Academic Homepage";
-            document.getElementById('footer-name').innerText = p.name || "My Name";
-            document.getElementById('year').innerText = new Date().getFullYear();
+/* ── Theme toggle setup ─────────────────────────── */
+function setupToggle() {
+    updateToggleBtn(THEME);
+    document.getElementById('theme-toggle').addEventListener('click', () => {
+        switchTheme(THEME === 'claude' ? 'apple' : THEME === 'apple' ? 'japan' : 'claude');
+    });
+}
 
-            // Favicon 逻辑
-            if (p.favicon) {
-                let link = document.querySelector("link[rel~='icon']");
-                if (!link) {
-                    link = document.createElement('link');
-                    link.rel = 'icon';
-                    document.getElementsByTagName('head')[0].appendChild(link);
-                }
-                link.href = p.favicon;
-            }
+function updateToggleBtn(theme) {
+    const btn = document.getElementById('theme-toggle');
+    if (theme === 'claude') {
+        btn.querySelector('.tg-icon').innerHTML = '<i class="fab fa-apple"></i>';
+        btn.querySelector('.tg-text').textContent = 'Apple Style';
+    } else if (theme === 'apple') {
+        btn.querySelector('.tg-icon').innerHTML = '🌸';
+        btn.querySelector('.tg-text').textContent = 'Japan Style';
+    } else {
+        btn.querySelector('.tg-icon').innerHTML = '<svg width="12" height="12" viewBox="0 0 12 12" fill="none"><polygon points="6,0 12,12 0,12" fill="currentColor" opacity=".8"/></svg>';
+        btn.querySelector('.tg-text').textContent = 'Claude Style';
+    }
+}
 
-            const sidebar = document.getElementById('sidebar');
-            
-            let nameEn = p.name;
-            let nameCn = "";
-            if (p.name && p.name.includes('(')) {
-                const match = p.name.match(/(.*)\((.*)\)/);
-                if (match) {
-                    nameEn = match[1].trim();
-                    nameCn = match[2].trim();
-                }
-            }
+function applyTheme(theme, animate) {
+    document.documentElement.setAttribute('data-theme', theme);
+    THEME = theme;
+    localStorage.setItem('site-theme', theme);
 
-            const avatarPath = p.avatar || 'assets/avatar.jpg'; 
+    /* show/hide heading emoji */
+    document.querySelectorAll('.h-emoji').forEach(el => {
+        el.style.display = theme === 'apple' ? 'none' : '';
+    });
+}
 
-            let html = `
-                <img id="avatar" src="${avatarPath}" alt="Avatar">
-                <div id="name">${nameEn}</div>
-                ${nameCn ? `<div id="name-cn">${nameCn}</div>` : ''}
-                <div id="title">${p.role || ''}<br>${p.organization || ''}</div>
-                <div class="contact-info">
-            `;
+function switchTheme(to) {
+    const body = document.body;
+    body.style.transition = 'opacity .18s ease';
+    body.style.opacity = '0';
 
-            if (p.social) {
-                p.social.forEach(item => {
-                    let iconClass = item.icon;
-                    if (item.text && item.text.toLowerCase().includes("scholar")) {
-                         iconClass = "ai ai-google-scholar";
-                    }
-                    html += `
-                        <div class="contact-item">
-                            <i class="${iconClass}"></i>
-                            <a href="${item.link}" target="_blank">${item.text || "Link"}</a>
-                        </div>
-                    `;
-                });
-            }
-            html += `</div>`;
-            sidebar.innerHTML = html;
+    setTimeout(() => {
+        if (to !== 'apple') clearFadeAnimations();
+        applyTheme(to, true);
+        updateToggleBtn(to);
+
+        body.style.opacity = '';
+        body.style.transition = '';
+
+        if (to === 'apple') {
+            /* slight delay so layout reflow settles before observing */
+            setTimeout(setupFadeAnimations, 60);
         }
-
-        function generateNavigation() {
-            const nav = document.getElementById('top-nav');
-            const headers = document.querySelectorAll('#content h1'); 
-            
-            nav.innerHTML = ''; 
-
-            if (headers.length === 0) {
-                nav.style.display = 'none';
-                return;
-            }
-
-            headers.forEach((header, index) => {
-                if (!header.id) header.id = 'section-' + index;
-
-                const link = document.createElement('a');
-                link.href = `#${header.id}`;
-                link.innerText = header.innerText.replace(/^[^\w\s]+/, '').trim(); 
-                
-                link.onclick = (e) => {
-                    e.preventDefault();
-                    const target = document.getElementById(header.id);
-                    const offset = 80; 
-                    const bodyRect = document.body.getBoundingClientRect().top;
-                    const elementRect = target.getBoundingClientRect().top;
-                    const elementPosition = elementRect - bodyRect;
-                    const offsetPosition = elementPosition - offset;
-
-                    window.scrollTo({ top: offsetPosition, behavior: "smooth" });
-                };
-                nav.appendChild(link);
-            });
-        }
-        loadSite();
-    </script>
+    }, 180);
+}
+</script>
 </body>
 </html>

@@ -1,7 +1,10 @@
 # 👨🏻‍💻 Biography
-I am currently a Ph.D. candidate at **Xinjiang University**, advised by Prof. Liang He. My research focuses on robust speaker representation learning, particularly under noisy label conditions.
+I am currently a Ph.D. candidate at Xinjiang University, advised by Prof. Liang He. My research focuses on robust speaker representation learning, particularly under noisy label conditions.
 
 # 🔥 News
+- **[2026.06]** Three papers were accepted by **INTERSPEECH 2026**.
+- **[2026.03]** One paper was accepted by **Odyssey 2026**.
+- **[2026.03]** One paper was accepted by **Pattern Recognition**.
 - **[2026.01]** Four papers were accepted by **ICASSP 2026**.
 
 # 🎓 Education
@@ -11,9 +14,11 @@ I am currently a Ph.D. candidate at **Xinjiang University**, advised by Prof. Li
 
 # 📝 Selected Publications
 
-- **Zhihua Fang** and Liang He*, "[Hyperbolic Additive Margin Softmax with Hierarchical Information for Speaker Verification](https://arxiv.org/abs/2601.19709)", in **ICASSP**, 2026.
+- **Zhihua Fang** and Liang He*, "[DS<sup>3</sup>: Dual-Space Sample Selection for Speaker Representation Learning with Noisy Labels](https://www.sciencedirect.com/science/article/abs/pii/S0031320326005613)", **Pattern Recognition**, 2026.
 
-- **Zhihua Fang**, Shumei Tao, Junxu Wang, and Liang He*, "[XM-ALIGN: Unified Cross-Modal Embedding Alignment for Face-Voice Association](https://arxiv.org/abs/2512.06757)", in **ICASSP**, 2026.
+- **Zhihua Fang** and Liang He*, "[Hyperbolic Additive Margin Softmax with Hierarchical Information for Speaker Verification](https://ieeexplore.ieee.org/document/11463316)", in **ICASSP**, 2026.
+
+- **Zhihua Fang**, Shumei Tao, Junxu Wang, and Liang He*, "[XM-ALIGN: Unified Cross-Modal Embedding Alignment for Face-Voice Association](https://ieeexplore.ieee.org/document/11463876)", in **ICASSP**, 2026.
 
 - Shun Huang, **Zhihua Fang**, and Liang He*, "[Noise Supervised Contrastive Learning and Feature-Perturbed for Anomalous Sound Detection](https://doi.org/10.1109/icassp49660.2025.10888995)", in **ICASSP**, 2025.
 
@@ -36,5 +41,5 @@ I am currently a Ph.D. candidate at **Xinjiang University**, advised by Prof. Li
 - **Xinjiang Autonomous Region Academic Scholarship for Graduate Students**, ($\times$2)
 
 # Academic Services
-- **Conference Reviewer**: ICASSP (2025-2026), ICME (2024-2026), INTERSPEECH (2026)
-- **Journal Reviewer**: IEEE Signal Processing Letters, Scientific Reports
+- **Conference Reviewer**: ICASSP (2025-2026), ICME (2024-2026), INTERSPEECH (2026), ACM MM (2026)
+- **Journal Reviewer**: IEEE Transactions on Neural Networks and Learning Systems, IEEE Signal Processing Letters, Scientific Reports
