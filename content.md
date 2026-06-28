@@ -14,6 +14,8 @@ I am currently a Ph.D. candidate at Xinjiang University, advised by Prof. Liang 
 
 # 📝 Selected Publications
 
+- **Zhihua Fang**, Liang He*, and Weiwu Jiang,  "[Spoken Language Identification with Pre-trained Models and Margin Loss](https://www.isca-archive.org/tmp/odyssey_2026/fang26_odyssey.html)", **Odyssey 2026**, 2026.
+
 - **Zhihua Fang** and Liang He*, "[DS<sup>3</sup>: Dual-Space Sample Selection for Speaker Representation Learning with Noisy Labels](https://www.sciencedirect.com/science/article/abs/pii/S0031320326005613)", **Pattern Recognition**, 2026.
 
 - **Zhihua Fang** and Liang He*, "[Hyperbolic Additive Margin Softmax with Hierarchical Information for Speaker Verification](https://ieeexplore.ieee.org/document/11463316)", in **ICASSP**, 2026.
